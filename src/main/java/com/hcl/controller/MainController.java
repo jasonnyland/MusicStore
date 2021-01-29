@@ -66,6 +66,16 @@ public class MainController {
 		return new ModelAndView("products", "products", allProducts);
 	}
 	
+	@GetMapping("/cart")
+	public ModelAndView getCart(HttpSession session) {
+		List<Product> cartList = (List<Product>) session.getAttribute("cart");
+		if (cartList == null) {
+			cartList = new ArrayList<Product>();
+			session.setAttribute("cart", cartList);
+		}		
+		return new ModelAndView("cart", "cart", cartList);
+	}
+	
 	@GetMapping("/addcart/{id}")
 	public ModelAndView getAddCart(@PathVariable long id, HttpSession session) {
 		Product prodToAdd = prodRepo.findById(id).get();
