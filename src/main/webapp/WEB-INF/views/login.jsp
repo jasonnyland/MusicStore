@@ -1,3 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,20 +20,18 @@
 			<div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
 				<div class="card card-signin my-5">
 					<div class="card-body">
-						<h5 class="card-title text-center my-3">Sign In</h5>
-						<form class="form-signin">
+						<h5 class="card-title text-center my-3">Login</h5>
+						<form:form class="form-signin" modelAttribute="form">
 							<div class="form-label-group my-1">
-								<label for="inputEmail">Email address</label>
-								<input type="email" id="inputEmail" class="form-control" placeholder="Email address"
-									required autofocus>
+								<form:label path="email" for="inputEmail">Email address</form:label>
+								<form:input path="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" />
 							</div>
 							<div class="form-label-group my-1">
-								<label for="inputPassword">Password</label>
-								<input type="password" id="inputPassword" class="form-control" placeholder="Password"
-									required>
+								<form:label path="password" for="inputPassword">Password</form:label>
+								<form:input path="password" type="password" id="inputPassword" class="form-control" placeholder="Password" />
 							</div>
-							<button class="btn btn-lg btn-primary btn-block mt-5" type="submit">Sign in</button>
-						</form>
+							<button class="btn btn-lg btn-primary btn-block mt-5" type="submit">Login</button>
+						</form:form>
 					</div>
 				</div>
 			</div>
