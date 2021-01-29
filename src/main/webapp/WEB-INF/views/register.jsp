@@ -23,13 +23,43 @@ integrity="sha384-qF/QmIAj5ZaYFAeQcrQ6bfVMAh4zZlrGwTPY7T/M+iTTLJqJBJjwwnsE5Y0mV7
 						<h5 class="card-title text-center my-3">Register</h5>
 						<form:form class="form-signin" modelAttribute="form">
 							<div class="form-label-group my-1">
-								<form:label path="userEmail" for="inputEmail">Email address</form:label>
-								<form:input path="userEmail" type="email" id="inputEmail" class="form-control" placeholder="Email address" />
+								<form:label path="userEmail">Email address</form:label>
+								<form:input path="userEmail" type="email" class="form-control" placeholder="Email address" />
 							</div>
 							<div class="form-label-group my-1">
 								<form:label path="userPass" for="inputPassword">Password</form:label>
-								<form:input path="userPass" type="password" id="inputPassword" class="form-control" placeholder="Password" />
+								<form:input path="userPass" type="password" class="form-control" placeholder="Password" />
 							</div>
+							<hr class="my-4">
+							<div class="form-label-group my-1">
+								<form:label path="userName">Full Name</form:label>
+								<form:input path="userName" type="text" class="form-control" placeholder="Your Full Name" />
+							</div>
+							<div class="form-label-group my-1">
+								<form:label path="userPhone">Phone Number</form:label>
+								<form:input path="userPhone" type="text" class="form-control" placeholder="(000)000-0000" />
+							</div>
+							<div class="form-label-group my-1">
+								<form:label path="userStreet1">Street Address</form:label>
+								<form:input path="userStreet1" type="text" class="form-control" placeholder="123 Main St." />
+							</div>
+							<div class="form-label-group my-1">
+								<form:label path="userStreet2">Address Line 2 (Apt #, Unit #, etc)</form:label>
+								<form:input path="userStreet2" type="text" class="form-control" placeholder="Apt 123" />
+							</div>
+							<div class="form-label-group my-1">
+								<form:label path="userCity">City</form:label>
+								<form:input path="userCity" type="text" class="form-control" placeholder="City" />
+							</div>
+							<div class="form-label-group my-1">
+								<form:label path="userState">State</form:label>
+								<form:input path="userState" type="text" class="form-control" placeholder="State" />
+							</div>
+							<div class="form-label-group my-1">
+								<form:label path="userCountry">Country</form:label>
+								<form:input path="userCountry" type="text" class="form-control" placeholder="Country" />
+							</div>
+							
 							<button class="btn btn-lg btn-primary btn-block mt-5" type="submit">Register</button>
 						</form:form>
 					</div>

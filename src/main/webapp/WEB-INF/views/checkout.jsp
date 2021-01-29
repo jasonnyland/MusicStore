@@ -17,80 +17,110 @@
 
 <body>
 
-    <!-- Menu Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="/">Music Store</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+	<!-- Menu Bar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand" href="/">Music Store</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarColor01" aria-controls="navbarColor01"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/products">Products</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/cart">Cart</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+		<div class="collapse navbar-collapse" id="navbarColor01">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" href="/">Home <span
+						class="sr-only">(current)</span>
+				</a></li>
+				<li class="nav-item"><a class="nav-link" href="/products">Products</a>
+				</li>
+				<li class="nav-item active"><a class="nav-link" href="/cart">Cart</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item"><a class="nav-link" href="/login">Login</a>
+				</li>
+				<li class="nav-item"><a class="nav-link" href="/register">Register</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
 
 	<!-- Product Table Header -->
 	<div class="px-1 py-3">
-		<h5>Checkout</h5>
-		<p>These are products in your cart</p>
+		<h4>Checkout</h4>
+		<p>Please confirm your order to purchase:</p>
 	</div>
 
 	<!-- Product Table -->
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th scope="col">ID</th>
-				<th scope="col">Name</th>
-				<th scope="col">Description</th>
-				<th scope="col">Category</th>
-				<th scope="col">Price</th>
-				<th scope="col">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${cart}" var="prod">
-				<tr>
-					<td>${prod.id}</td>
-					<td>${prod.prodName}</td>
-					<td>${prod.prodDesc}</td>
-					<td>${prod.prodCat}</td>
-					<td><fmt:setLocale value="en_US" /> <fmt:formatNumber
-							value="${prod.prodPrice}" type="currency" /></td>
-					<td>
-						<a href="/removecart/${prod.id}"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
-					</td>
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
-	<p>Total: <fmt:setLocale value="en_US" /> <fmt:formatNumber value="${total}" type="currency" /></p>
-	<p>Ship to: ${user.userEmail}</p>
+
+
+	<div class="card mx-3 px-3 my-3 py-3">
+		<div class="row">
+			<div class="col">
+				<h5>Ship To:</h5>
+				${user.userName} <br /> ${user.userStreet1} <br />
+				${user.userStreet2} <br /> ${user.userCity}, ${user.userState} <br />
+				${user.userCountry}
+			</div>
+			<div class="col">
+				<h5>Bill To:</h5>
+				${user.userName} <br /> ${user.userStreet1} <br />
+				${user.userStreet2} <br /> ${user.userCity}, ${user.userState} <br />
+				${user.userCountry}
+			</div>
+		</div>
+		<div class="row">
+			<div class="container my-3 px-0 border">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">Name</th>
+							<th scope="col">Description</th>
+							<th scope="col">Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${cart}" var="prod">
+							<tr>
+								<td>${prod.id}</td>
+								<td>${prod.prodName}</td>
+								<td>${prod.prodDesc}</td>
+								<td><fmt:setLocale value="en_US" /> <fmt:formatNumber
+										value="${prod.prodPrice}" type="currency" /></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+				<div class="container text-right">
+					<p class="mx-3">
+
+						<span> Total: <fmt:setLocale value="en_US" /> <fmt:formatNumber
+								value="${total}" type="currency" />
+						</span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+			<a href="/cart"><button type="button"
+						class="btn btn-danger">Back To Cart</button></a>
+			</div>
+			<div class="col">
+				<a href="/confirm"><button type="button"
+						class="btn btn-success float-right">
+						Confirm Order
+						<fmt:setLocale value="en_US" />
+						<fmt:formatNumber value="${total}" type="currency" />
+					</button></a>
+			</div>
+		</div>
+	</div>
+
 	<!-- Action Buttons -->
-	<span>
-	<a href="/confirm"><button type="button" class="btn btn-success">Confirm</button></a>
-	</span>
-	
+
+
 
 	<!-- Footer -->
 	<footer class="footer navbar-default" role="contentinfo">
