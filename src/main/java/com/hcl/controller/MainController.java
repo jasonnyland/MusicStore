@@ -97,4 +97,21 @@ public class MainController {
 		return new ModelAndView("cart", "cart", cartList);
 	}
 	
+	@GetMapping("/checkout")
+	public ModelAndView getCheckout(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return new ModelAndView("redirect:/login");
+		}
+		List<Product> cartList = (List<Product>) session.getAttribute("cart");
+		if (cartList == null) {
+			return new ModelAndView("redirect:/products");
+		}
+		ModelAndView mv =  new ModelAndView("checkout","cart", cartList);
+		mv.addObject("user", user);
+		double total = cartList.stream().mapToDouble(p -> p.getProdPrice()).sum();
+		mv.addObject("total", total);
+		return mv;
+		
+	}
 }

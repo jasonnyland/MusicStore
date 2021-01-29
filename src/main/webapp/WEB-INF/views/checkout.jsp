@@ -52,7 +52,7 @@
 
 	<!-- Product Table Header -->
 	<div class="px-1 py-3">
-		<h5>Cart</h5>
+		<h5>Checkout</h5>
 		<p>These are products in your cart</p>
 	</div>
 
@@ -84,10 +84,11 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<p>Total: <fmt:setLocale value="en_US" /> <fmt:formatNumber value="${total}" type="currency" /></p>
+	<p>Ship to: ${user.userEmail}</p>
 	<!-- Action Buttons -->
 	<span>
-	<a href="/products"><button type="button" class="btn btn-success disabled">Continue Shopping</button></a>
-	<a href="/checkout"><button type="button" class="btn btn-success">Checkout</button></a>
+	<a href="/confirm"><button type="button" class="btn btn-success">Confirm</button></a>
 	</span>
 	
 
