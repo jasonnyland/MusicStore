@@ -52,8 +52,8 @@
 
 	<!-- Product Table Header -->
 	<div class="px-1 py-3">
-		<h5>All Products</h5>
-		<p>Check out all our awesome products available now!</p>
+		<h5>Cart</h5>
+		<p>These are products in your cart</p>
 	</div>
 
 	<!-- Product Table -->
@@ -69,7 +69,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${products}" var="prod">
+			<c:forEach items="${cart}" var="prod">
 				<tr>
 					<td>${prod.id}</td>
 					<td>${prod.prodName}</td>
@@ -78,8 +78,7 @@
 					<td><fmt:setLocale value="en_US" /> <fmt:formatNumber
 							value="${prod.prodPrice}" type="currency" /></td>
 					<td>
-						<a href="/addcart/${prod.id}"><button type="button" class="btn btn-info btn-sm">Add to
-							Cart</button></a>
+						<a href="/removecart/${prod.id}"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
 					</td>
 				</tr>
 			</c:forEach>

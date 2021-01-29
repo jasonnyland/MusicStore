@@ -1,5 +1,6 @@
 package com.hcl.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -63,4 +65,26 @@ public class MainController {
 		List<Product> allProducts = (List<Product>) prodRepo.findAll();
 		return new ModelAndView("products", "products", allProducts);
 	}
+	
+	@GetMapping("/addcart/{id}")
+	public ModelAndView getAddCart(@PathVariable long id, HttpSession session) {
+		Product prodToAdd = prodRepo.findById(id).get();
+		List<Product> cartList = (List<Product>) session.getAttribute("cart");
+		if (cartList == null) {
+			cartList = new ArrayList<Product>();
+		}
+		cartList.add(prodToAdd);
+		session.setAttribute("cart", cartList);
+		return new ModelAndView("cart", "cart", cartList);
+	}
+	
+	@GetMapping("/removecart/{id}")
+	public ModelAndView getRemoveCart(@PathVariable long id, HttpSession session) {
+		Product prodToRemove = prodRepo.findById(id).get();
+		List<Product> cartList = (List<Product>) session.getAttribute("cart");
+		cartList.remove(prodToRemove);
+		session.setAttribute("cart", cartList);
+		return new ModelAndView("cart", "cart", cartList);
+	}
+	
 }
