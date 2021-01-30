@@ -26,8 +26,9 @@ public class MainController {
 	private ProductRepository prodRepo;
 	
 	@GetMapping("/")
-	public ModelAndView home() {
-		return new ModelAndView("index");
+	public ModelAndView home(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		return new ModelAndView("index", "user", user);
 	}
 	
 	@GetMapping("/register")
@@ -61,9 +62,12 @@ public class MainController {
 	}
 	
 	@GetMapping("/products")
-	public ModelAndView getProducts() {
+	public ModelAndView getProducts(HttpSession session) {
 		List<Product> allProducts = (List<Product>) prodRepo.findAll();
-		return new ModelAndView("products", "products", allProducts);
+		ModelAndView mv = new ModelAndView("products", "products", allProducts);
+		User user = (User) session.getAttribute("user");
+		mv.addObject("user", user);
+		return mv;
 	}
 	
 	@GetMapping("/cart")
@@ -72,8 +76,11 @@ public class MainController {
 		if (cartList == null) {
 			cartList = new ArrayList<Product>();
 			session.setAttribute("cart", cartList);
-		}		
-		return new ModelAndView("cart", "cart", cartList);
+		}
+		User user = (User) session.getAttribute("user");
+		ModelAndView mv = new ModelAndView("cart", "cart", cartList);
+		mv.addObject("user", user);
+		return mv;
 	}
 	
 	@GetMapping("/addcart/{id}")
@@ -85,7 +92,7 @@ public class MainController {
 		}
 		cartList.add(prodToAdd);
 		session.setAttribute("cart", cartList);
-		return new ModelAndView("cart", "cart", cartList);
+		return new ModelAndView("redirect:/cart");
 	}
 	
 	@GetMapping("/removecart/{id}")
@@ -94,7 +101,7 @@ public class MainController {
 		List<Product> cartList = (List<Product>) session.getAttribute("cart");
 		cartList.remove(prodToRemove);
 		session.setAttribute("cart", cartList);
-		return new ModelAndView("cart", "cart", cartList);
+		return new ModelAndView("redirect:/cart");
 	}
 	
 	@GetMapping("/checkout")
@@ -112,6 +119,33 @@ public class MainController {
 		double total = cartList.stream().mapToDouble(p -> p.getProdPrice()).sum();
 		mv.addObject("total", total);
 		return mv;
-		
+	}
+	
+	@GetMapping("/profile")
+	public ModelAndView getProfile(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return new ModelAndView("redirect:/login");
+		}
+		User newUser = new User();
+		ModelAndView mv = new ModelAndView("profile", "form", newUser);
+		mv.addObject("user", user);
+		return mv;
+	}
+	@PostMapping("/profile")
+	public ModelAndView postProfile(User u, HttpSession session) {
+		User test = (User) session.getAttribute("user");
+		if (test == null) {
+			return new ModelAndView("redirect:/login");
+		}
+		session.setAttribute("user", u);
+		userRepo.save(u);
+		return new ModelAndView("redirect:/products");
+	}
+	
+	@GetMapping("/logout")
+	public ModelAndView logout(HttpSession session) {
+		session.invalidate();
+		return new ModelAndView("redirect:/");
 	}
 }

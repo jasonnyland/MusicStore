@@ -17,38 +17,41 @@
 
 <body>
 
-    <!-- Menu Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="/">Music Store</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+	<!-- Menu Bar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand" href="/">Music Store</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarColor01" aria-controls="navbarColor01"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/products">Products</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/cart">Cart</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+		<div class="collapse navbar-collapse" id="navbarColor01">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"><a class="nav-link" href="/">Home <span
+						class="sr-only">(current)</span>
+				</a></li>
+				<li class="nav-item"><a class="nav-link" href="/products">Products</a>
+				</li>
+				<li class="nav-item active"><a class="nav-link" href="/cart">Cart</a>
+				</li>
+			</ul>
+			<ul class="navbar-nav ml-auto">
+				<c:if test="${user == null}">
+					<li class="nav-item"><a class="nav-link" href="/login">Login</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" href="/register">Register</a>
+					</li>
+				</c:if>
+				<c:if test="${user != null}">
+					<li class="nav-item"><a class="nav-link" href="/profile">Hello
+							${user.userName}</a></li>
+					<li class="nav-item"><a class="nav-link" href="/logout">Logout</a>
+					</li>
+				</c:if>
+			</ul>
+		</div>
+	</nav>
 
 	<!-- Product Table Header -->
 	<div class="px-1 py-3">
@@ -77,19 +80,21 @@
 					<td>${prod.prodCat}</td>
 					<td><fmt:setLocale value="en_US" /> <fmt:formatNumber
 							value="${prod.prodPrice}" type="currency" /></td>
-					<td>
-						<a href="/removecart/${prod.id}"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
-					</td>
+					<td><a href="/removecart/${prod.id}"><button type="button"
+								class="btn btn-danger btn-sm">Remove</button></a></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	<!-- Action Buttons -->
-	<span>
-	<a href="/products"><button type="button" class="btn btn-success disabled">Continue Shopping</button></a>
-	<a href="/checkout"><button type="button" class="btn btn-success">Checkout</button></a>
+	<span> <a href="/products"><button type="button"
+				class="btn btn-success disabled">Continue Shopping</button></a> <c:if
+			test="${cart.isEmpty() == false}">
+			<a href="/checkout"><button type="button" class="btn btn-success">Checkout</button></a>
+		</c:if>
+
 	</span>
-	
+
 
 	<!-- Footer -->
 	<footer class="footer navbar-default" role="contentinfo">
