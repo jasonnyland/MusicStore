@@ -2,6 +2,7 @@ package com.hcl.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hcl.dao.OrderRepository;
 import com.hcl.dao.ProductRepository;
 import com.hcl.dao.UserRepository;
 import com.hcl.model.Login;
+import com.hcl.model.Order;
 import com.hcl.model.Product;
 import com.hcl.model.User;
 
@@ -24,6 +27,8 @@ public class MainController {
 	private UserRepository userRepo;
 	@Autowired
 	private ProductRepository prodRepo;
+	@Autowired
+	private OrderRepository orderRepo;
 	
 	@GetMapping("/")
 	public ModelAndView home(HttpSession session) {
@@ -37,8 +42,9 @@ public class MainController {
 	}
 	
 	@PostMapping("/register")
-	public String putRegister(User u) {
+	public String putRegister(User u, HttpSession session) {
 		userRepo.save(u);
+		session.setAttribute("user", u);
 		return("redirect:/");
 	}
 	
@@ -153,6 +159,21 @@ public class MainController {
 		Product prodToSee = prodRepo.findById(id).get();
 		ModelAndView mv = new ModelAndView("details", "product", prodToSee);
 		mv.addObject("user", (User) session.getAttribute("user"));
+		return mv;
+	}
+	
+	@GetMapping("/confirm")
+	public ModelAndView getConfirm(HttpSession session) {
+		List<Product> cartList = (List<Product>) session.getAttribute("cart");
+		String cartOutput = cartList.stream().map(Object::toString).collect(Collectors.joining(", "));
+		System.out.println("debug: " + cartOutput);
+		Order newOrder = new Order();
+		newOrder.setUser((User) session.getAttribute("user"));
+		newOrder.setCartSerial(cartOutput);
+		orderRepo.save(newOrder);
+		List<Product> newCart = new ArrayList<Product>();
+		session.setAttribute("cart", newCart);
+		ModelAndView mv =  new ModelAndView("confirm", "orderNo", newOrder.getId());
 		return mv;
 	}
 }

@@ -13,6 +13,8 @@ import lombok.Data;
 @Table(name="users")
 public class User {
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private long id;
 	private String userEmail;
 	private String userPass;
 	private String userName;
