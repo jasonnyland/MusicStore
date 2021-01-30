@@ -31,7 +31,7 @@
 				<li class="nav-item"><a class="nav-link" href="/">Home <span
 						class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item active"><a class="nav-link"
+				<li class="nav-item"><a class="nav-link"
 					href="/products">Products</a></li>
 				<li class="nav-item"><a class="nav-link" href="/cart">Cart</a>
 				</li>
@@ -54,40 +54,30 @@
 		</div>
 	</nav>
 
-	<!-- Product Table Header -->
-	<div class="px-1 py-3">
-		<h5>All Products</h5>
-		<p>Check out all our awesome products available now!</p>
+	<!-- Product  -->
+	<div class="row">
+	<div class="col">
+	<img src="../product${product.id}.jpg" class="img-fluid img-thumbnail">
 	</div>
+	<div class="col">
+	<div class="px-1 py-3">
+		<div><h3>${product.prodName}</h3></div>
+		<p>
+		Description: <br/>
+		"${product.prodDesc}"</p>
+		<p>
+		Category: <br/>
+		${product.prodCat}</p>
+		<p>
+		Price: <fmt:setLocale value="en_US" /> <fmt:formatNumber
+							value="${product.prodPrice}" type="currency" /></p>
+		<a href="/addcart/${product.id}"><button type="button"
+								class="btn btn-info btn-sm">Add to Cart</button></a>
+	</div>
+	</div>
+	</div>
+	
 
-	<!-- Product Table -->
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th style="width:200px">ID</th>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Category</th>
-				<th>Price</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${products}" var="prod">
-				<tr>
-					<td><a href="/details/${prod.id}"><img src="./product${prod.id}.jpg" class="img-fluid" style="max-height:100px"></a></td>
-					<td><a href="/details/${prod.id}">${prod.prodName}</a></td>
-					<td>${prod.prodDesc}</td>
-					<td>${prod.prodCat}</td>
-					<td><fmt:setLocale value="en_US" /> <fmt:formatNumber
-							value="${prod.prodPrice}" type="currency" /></td>
-					<td><a href="/addcart/${prod.id}"><button type="button"
-								class="btn btn-info btn-sm">Add to Cart</button></a></td>
-				</tr>
-			</c:forEach>
-		</tbody>
-
-	</table>
 
 	<!-- Footer -->
 	<footer class="footer navbar-default" role="contentinfo">

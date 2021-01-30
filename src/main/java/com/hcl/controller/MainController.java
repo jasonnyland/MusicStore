@@ -27,8 +27,7 @@ public class MainController {
 	
 	@GetMapping("/")
 	public ModelAndView home(HttpSession session) {
-		User user = (User) session.getAttribute("user");
-		return new ModelAndView("index", "user", user);
+		return new ModelAndView("index", "user", (User) session.getAttribute("user"));
 	}
 	
 	@GetMapping("/register")
@@ -147,5 +146,13 @@ public class MainController {
 	public ModelAndView logout(HttpSession session) {
 		session.invalidate();
 		return new ModelAndView("redirect:/");
+	}
+	
+	@GetMapping("/details/{id}")
+	public ModelAndView getDetails(@PathVariable long id, HttpSession session) {
+		Product prodToSee = prodRepo.findById(id).get();
+		ModelAndView mv = new ModelAndView("details", "product", prodToSee);
+		mv.addObject("user", (User) session.getAttribute("user"));
+		return mv;
 	}
 }
