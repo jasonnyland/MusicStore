@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hcl.dao.OrderRepository;
@@ -176,4 +177,14 @@ public class MainController {
 		ModelAndView mv =  new ModelAndView("confirm", "orderNo", newOrder.getId());
 		return mv;
 	}
+	
+	@GetMapping("/search")
+	public ModelAndView getSearch(@RequestParam String term, HttpSession session) {
+		List<Product> allProducts = (List<Product>) prodRepo.search(term);
+		ModelAndView mv = new ModelAndView("products", "products", allProducts);
+		User user = (User) session.getAttribute("user");
+		mv.addObject("user", user);
+		return mv;
+	}
+	//what
 }

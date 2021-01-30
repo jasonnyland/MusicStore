@@ -38,6 +38,7 @@
 			</ul>
 
 			<ul class="navbar-nav ml-auto">
+				
 				<c:if test="${user == null}">
 					<li class="nav-item"><a class="nav-link" href="/login">Login</a>
 					</li>
@@ -45,11 +46,16 @@
 					</li>
 				</c:if>
 				<c:if test="${user != null}">
-					<li class="nav-item"><a class="nav-link" href="/profile">Hello ${user.userName}</a>
-					</li>
+					<li class="nav-item"><a class="nav-link" href="/profile">Hello
+							${user.userName}</a></li>
 					<li class="nav-item"><a class="nav-link" href="/logout">Logout</a>
 					</li>
 				</c:if>
+				<form class="form-inline my-2 my-lg-0" method="get" action="/search">
+					<input class="form-control mr-sm-2" type="text"
+						placeholder="Search" name="term">
+					<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+				</form>
 			</ul>
 		</div>
 	</nav>
@@ -64,7 +70,7 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th style="width:200px">ID</th>
+				<th style="width: 200px">ID</th>
 				<th>Name</th>
 				<th>Description</th>
 				<th>Category</th>
@@ -75,7 +81,9 @@
 		<tbody>
 			<c:forEach items="${products}" var="prod">
 				<tr>
-					<td><a href="/details/${prod.id}"><img src="./product${prod.id}.jpg" class="img-fluid" style="max-height:100px"></a></td>
+					<td><a href="/details/${prod.id}"><img
+							src="/product${prod.id}.jpg" class="img-fluid"
+							style="max-height: 100px"></a></td>
 					<td><a href="/details/${prod.id}">${prod.prodName}</a></td>
 					<td>${prod.prodDesc}</td>
 					<td>${prod.prodCat}</td>
