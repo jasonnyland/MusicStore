@@ -73,7 +73,7 @@
 	<!-- Product  -->
 	<div class="row">
 	<div class="col">
-	<img src="../product${product.id}.jpg" class="img-fluid img-thumbnail">
+	<img src="/product${product.id}.jpg" class="img-fluid img-thumbnail">
 	</div>
 	<div class="col">
 	<div class="px-1 py-3">

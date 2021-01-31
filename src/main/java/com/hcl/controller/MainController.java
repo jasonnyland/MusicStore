@@ -30,43 +30,43 @@ public class MainController {
 	private ProductRepository prodRepo;
 	@Autowired
 	private OrderRepository orderRepo;
-	
+
 	@GetMapping("/")
 	public ModelAndView home(HttpSession session) {
 		return new ModelAndView("index", "user", (User) session.getAttribute("user"));
 	}
-	
+
 	@GetMapping("/register")
 	public ModelAndView getRegister() {
-		User newUser = new User();	
+		User newUser = new User();
 		return new ModelAndView("register", "form", newUser);
 	}
-	
+
 	@PostMapping("/register")
 	public String putRegister(User u, HttpSession session) {
 		userRepo.save(u);
 		session.setAttribute("user", u);
-		return("redirect:/");
+		return ("redirect:/");
 	}
-	
+
 	@GetMapping("/login")
 	public ModelAndView getLogin() {
-		Login login = new Login();	
+		Login login = new Login();
 		return new ModelAndView("login", "form", login);
 	}
-	
+
 	@PostMapping("/login")
 	public String putLogin(Login l, HttpSession session) {
 		User user = userRepo.findByUserEmail(l.getEmail());
 		if (user != null) {
 			session.setAttribute("user", user);
-			return("redirect:/products");
+			return ("redirect:/products");
 		} else {
-			return("redirect:/login");
+			return ("redirect:/login");
 		}
-		
+
 	}
-	
+
 	@GetMapping("/products")
 	public ModelAndView getProducts(HttpSession session) {
 		List<Product> allProducts = (List<Product>) prodRepo.findAll();
@@ -75,7 +75,7 @@ public class MainController {
 		mv.addObject("user", user);
 		return mv;
 	}
-	
+
 	@GetMapping("/cart")
 	public ModelAndView getCart(HttpSession session) {
 		List<Product> cartList = (List<Product>) session.getAttribute("cart");
@@ -88,7 +88,7 @@ public class MainController {
 		mv.addObject("user", user);
 		return mv;
 	}
-	
+
 	@GetMapping("/addcart/{id}")
 	public ModelAndView getAddCart(@PathVariable long id, HttpSession session) {
 		Product prodToAdd = prodRepo.findById(id).get();
@@ -100,7 +100,7 @@ public class MainController {
 		session.setAttribute("cart", cartList);
 		return new ModelAndView("redirect:/cart");
 	}
-	
+
 	@GetMapping("/removecart/{id}")
 	public ModelAndView getRemoveCart(@PathVariable long id, HttpSession session) {
 		Product prodToRemove = prodRepo.findById(id).get();
@@ -109,7 +109,7 @@ public class MainController {
 		session.setAttribute("cart", cartList);
 		return new ModelAndView("redirect:/cart");
 	}
-	
+
 	@GetMapping("/checkout")
 	public ModelAndView getCheckout(HttpSession session) {
 		User user = (User) session.getAttribute("user");
@@ -120,13 +120,13 @@ public class MainController {
 		if (cartList == null) {
 			return new ModelAndView("redirect:/products");
 		}
-		ModelAndView mv =  new ModelAndView("checkout","cart", cartList);
+		ModelAndView mv = new ModelAndView("checkout", "cart", cartList);
 		mv.addObject("user", user);
 		double total = cartList.stream().mapToDouble(p -> p.getProdPrice()).sum();
 		mv.addObject("total", total);
 		return mv;
 	}
-	
+
 	@GetMapping("/profile")
 	public ModelAndView getProfile(HttpSession session) {
 		User user = (User) session.getAttribute("user");
@@ -138,6 +138,7 @@ public class MainController {
 		mv.addObject("user", user);
 		return mv;
 	}
+
 	@PostMapping("/profile")
 	public ModelAndView postProfile(User u, HttpSession session) {
 		User test = (User) session.getAttribute("user");
@@ -148,13 +149,13 @@ public class MainController {
 		userRepo.save(u);
 		return new ModelAndView("redirect:/products");
 	}
-	
+
 	@GetMapping("/logout")
 	public ModelAndView logout(HttpSession session) {
 		session.invalidate();
 		return new ModelAndView("redirect:/");
 	}
-	
+
 	@GetMapping("/details/{id}")
 	public ModelAndView getDetails(@PathVariable long id, HttpSession session) {
 		Product prodToSee = prodRepo.findById(id).get();
@@ -162,7 +163,7 @@ public class MainController {
 		mv.addObject("user", (User) session.getAttribute("user"));
 		return mv;
 	}
-	
+
 	@GetMapping("/confirm")
 	public ModelAndView getConfirm(HttpSession session) {
 		List<Product> cartList = (List<Product>) session.getAttribute("cart");
@@ -174,10 +175,10 @@ public class MainController {
 		orderRepo.save(newOrder);
 		List<Product> newCart = new ArrayList<Product>();
 		session.setAttribute("cart", newCart);
-		ModelAndView mv =  new ModelAndView("confirm", "orderNo", newOrder.getId());
+		ModelAndView mv = new ModelAndView("confirm", "orderNo", newOrder.getId());
 		return mv;
 	}
-	
+
 	@GetMapping("/search")
 	public ModelAndView getSearch(@RequestParam String term, HttpSession session) {
 		List<Product> allProducts = (List<Product>) prodRepo.search(term);
@@ -189,18 +190,121 @@ public class MainController {
 
 	@GetMapping("/admin")
 	public ModelAndView getAdmin(HttpSession session) {
+		// Verify Admin in Backend
 		User sessionUser = (User) session.getAttribute("user");
 		if (sessionUser == null) {
 			return new ModelAndView("redirect:/");
 		}
-		User lookupUser = (User) userRepo.findById(sessionUser.getId()).get();
+		User lookupUser = userRepo.findById(sessionUser.getId()).get();
 		if (lookupUser.isAdmin() == false) {
 			return new ModelAndView("redirect:/");
 		}
+		// --------------
 		List<Product> allProducts = (List<Product>) prodRepo.findAll();
 		ModelAndView mv = new ModelAndView("admin", "products", allProducts);
 		List<User> allUsers = (List<User>) userRepo.findAll();
 		mv.addObject("users", allUsers);
 		return mv;
+	}
+
+	@GetMapping("/admin/edituser/{id}")
+	public ModelAndView getEditUser(@PathVariable long id, HttpSession session) {
+		// Verify Admin in Backend
+		User sessionUser = (User) session.getAttribute("user");
+		if (sessionUser == null) {
+			return new ModelAndView("redirect:/");
+		}
+		User lookupUser = userRepo.findById(sessionUser.getId()).get();
+		if (lookupUser.isAdmin() == false) {
+			return new ModelAndView("redirect:/");
+		}
+		// --------------
+		User userToEdit = userRepo.findById(id).get();
+		ModelAndView mv = new ModelAndView("edituser", "form", userToEdit);
+		return mv;
+	}
+
+	@PostMapping("/admin/edituser/{id}")
+	public ModelAndView postEditUser(User u, @PathVariable long id, HttpSession session) {
+		// Verify Admin in Backend
+		User sessionUser = (User) session.getAttribute("user");
+		if (sessionUser == null) {
+			return new ModelAndView("redirect:/");
+		}
+		User lookupUser = userRepo.findById(sessionUser.getId()).get();
+		if (lookupUser.isAdmin() == false) {
+			return new ModelAndView("redirect:/");
+		}
+		// --------------
+		userRepo.save(u);
+		return new ModelAndView("redirect:/admin");
+	}
+	
+	@GetMapping("/admin/deluser/{id}")
+	public ModelAndView getDelUser(@PathVariable long id, HttpSession session) {
+		// Verify Admin in Backend
+		User sessionUser = (User) session.getAttribute("user");
+		if (sessionUser == null) {
+			return new ModelAndView("redirect:/");
+		}
+		User lookupUser = userRepo.findById(sessionUser.getId()).get();
+		if (lookupUser.isAdmin() == false) {
+			return new ModelAndView("redirect:/");
+		}
+		// --------------
+		User userToDel = userRepo.findById(id).get();
+		userRepo.delete(userToDel);
+		return new ModelAndView("redirect:/admin");
+	}
+
+	@GetMapping("/admin/editprod/{id}")
+	public ModelAndView getEditProd(@PathVariable long id, HttpSession session) {
+		// Verify Admin in Backend
+		User sessionUser = (User) session.getAttribute("user");
+		if (sessionUser == null) {
+			return new ModelAndView("redirect:/");
+		}
+		User lookupUser = userRepo.findById(sessionUser.getId()).get();
+		if (lookupUser.isAdmin() == false) {
+			return new ModelAndView("redirect:/");
+		}
+		// --------------
+		Product prodToEdit = prodRepo.findById(id).get();
+		return new ModelAndView("editprod", "form", prodToEdit);
+
+	}
+
+	@PostMapping("/admin/editprod/{id}")
+	public ModelAndView postEditProd(Product p, @PathVariable long id, HttpSession session) {
+		// Verify Admin in Backend
+		User sessionUser = (User) session.getAttribute("user");
+		if (sessionUser == null) {
+			return new ModelAndView("redirect:/");
+		}
+		User lookupUser = userRepo.findById(sessionUser.getId()).get();
+		if (lookupUser.isAdmin() == false) {
+			return new ModelAndView("redirect:/");
+		}
+		// --------------
+		prodRepo.save(p);
+		return new ModelAndView("redirect:/admin");
+	}
+	
+	@GetMapping("/admin/delprod/{id}")
+	public ModelAndView getDelProd(@PathVariable long id, HttpSession session) {
+		// Verify Admin in Backend
+		User sessionUser = (User) session.getAttribute("user");
+		if (sessionUser == null) {
+			return new ModelAndView("redirect:/");
+		}
+		User lookupUser = userRepo.findById(sessionUser.getId()).get();
+		if (lookupUser.isAdmin() == false) {
+			return new ModelAndView("redirect:/");
+		}
+		// --------------
+		Product prodToDel = prodRepo.findById(id).get();
+		prodRepo.delete(prodToDel);
+		return new ModelAndView("redirect:/admin");
+
 	}
 }

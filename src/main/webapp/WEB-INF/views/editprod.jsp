@@ -2,6 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,11 +32,11 @@
 				<li class="nav-item"><a class="nav-link" href="/">Home <span
 						class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link" href="/products">Products</a>
-				</li>
-				<li class="nav-item active"><a class="nav-link" href="/cart">Cart</a>
+				<li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
+				<li class="nav-item"><a class="nav-link" href="/cart">Cart</a>
 				</li>
 			</ul>
+
 			<ul class="navbar-nav ml-auto">
 				<c:if test="${user == null}">
 					<li class="nav-item dropdown"><a
@@ -70,69 +71,43 @@
 		</div>
 	</nav>
 
-	<!-- Product Table Header -->
-	<div class="px-1 py-3">
-		<h4>Admin Control Panel</h4>
-		<br />
-		<h5>All Products</h5>
-		<!-- Product Table -->
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th style="width: 200px">ID</th>
-					<th>Name</th>
-					<th>Description</th>
-					<th>Category</th>
-					<th>Price</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${products}" var="prod">
-					<tr>
-						<td>${prod.id}</td>
-						<td><a href="/details/${prod.id}">${prod.prodName}</a></td>
-						<td>${prod.prodDesc}</td>
-						<td>${prod.prodCat}</td>
-						<td><fmt:setLocale value="en_US" /> <fmt:formatNumber
-								value="${prod.prodPrice}" type="currency" /></td>
-						<td><a href="/admin/editprod/${prod.id}"><button type="button"
-									class="btn btn-warning btn-sm">Edit</button></a> <a
-							href="/admin/delprod/${prod.id}"><button type="button"
-									class="btn btn-danger btn-sm">Delete</button></a></td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-		<h5>List of Users</h5>
-		<!-- Product Table -->
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Phone</th>
-					<th>Admin</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${users}" var="u">
-					<tr>
-						<td>${u.id}</td>
-						<td>${u.userName}</td>
-						<td>${u.userEmail}</td>
-						<td>${u.userPhone}</td>
-						<td>${u.admin}</td>
-						<td><a href="/admin/edituser/${u.id}"><button type="button"
-									class="btn btn-warning btn-sm">Edit</button></a> <a
-							href="/admin/deluser/${u.id}"><button type="button"
-									class="btn btn-danger btn-sm">Delete</button></a></td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+	<!-- Product  -->
+	<div class="row">
+		<div class="col">
+			<img src="/product${form.id}.jpg" class="img-fluid img-thumbnail">
+		</div>
+		<div class="col">
+			<div class="px-1 py-3">
+				<form:form class="form-signin" modelAttribute="form">
+					<div class="form-label-group my-1">
+						<form:label path="prodName">Name</form:label>
+						<form:input path="prodName" type="text" class="form-control"
+							value="${form.prodName}" />
+					</div>
+					<div class="form-label-group my-1">
+						<form:label path="prodDesc">Description</form:label>
+						<form:input path="prodDesc" type="text" class="form-control"
+							value="${form.prodDesc}" />
+					</div>
+					<div class="form-label-group my-1">
+						<form:label path="prodCat">Category</form:label>
+						<form:input path="prodCat" type="text" class="form-control"
+							value="${form.prodCat}" />
+					</div>
+					<div class="form-label-group my-1">
+						<form:label path="prodPrice">Price</form:label>
+						<form:input path="prodPrice" type="text" class="form-control"
+							value="${form.prodPrice}" />
+					</div>
+
+					<button class="btn btn-lg btn-primary btn-block mt-5" type="submit">Save
+						Changes</button>
+				</form:form>
+
+				<!-- ----------- -->
+
+			</div>
+		</div>
 	</div>
 
 
