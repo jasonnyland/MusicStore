@@ -31,12 +31,11 @@
 				<li class="nav-item"><a class="nav-link" href="/">Home <span
 						class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item active"><a class="nav-link"
-					href="/products">Products</a></li>
-				<li class="nav-item"><a class="nav-link" href="/cart">Cart</a>
+				<li class="nav-item"><a class="nav-link" href="/products">Products</a>
+				</li>
+				<li class="nav-item active"><a class="nav-link" href="/cart">Cart</a>
 				</li>
 			</ul>
-
 			<ul class="navbar-nav ml-auto">
 				<c:if test="${user == null}">
 					<li class="nav-item dropdown"><a
@@ -73,40 +72,60 @@
 
 	<!-- Product Table Header -->
 	<div class="px-1 py-3">
+		<h4>Admin Control Panel</h4><br/>
 		<h5>All Products</h5>
-		<p>Check out all our awesome products available now!</p>
+		<!-- Product Table -->
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th style="width: 200px">ID</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Category</th>
+					<th>Price</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${products}" var="prod">
+					<tr>
+						<td>${prod.id}</td>
+						<td><a href="/details/${prod.id}">${prod.prodName}</a></td>
+						<td>${prod.prodDesc}</td>
+						<td>${prod.prodCat}</td>
+						<td><fmt:setLocale value="en_US" /> <fmt:formatNumber
+								value="${prod.prodPrice}" type="currency" /></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+		<h5>List of Users</h5>
+		<!-- Product Table -->
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${users}" var="u">
+					<tr>
+						<td>${u.id}</td>
+						<td>${u.userName}</td>
+						<td>${u.userEmail}</td>
+						<td>${u.userPhone}</td>
+						<td>${u.admin}</td>
+						
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
 	</div>
 
-	<!-- Product Table -->
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th style="width: 200px">Image</th>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Category</th>
-				<th>Price</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${products}" var="prod">
-				<tr>
-					<td><a href="/details/${prod.id}"><img
-							src="/product${prod.id}.jpg" class="img-fluid"
-							style="max-height: 100px"></a></td>
-					<td><a href="/details/${prod.id}">${prod.prodName}</a></td>
-					<td>${prod.prodDesc}</td>
-					<td>${prod.prodCat}</td>
-					<td><fmt:setLocale value="en_US" /> <fmt:formatNumber
-							value="${prod.prodPrice}" type="currency" /></td>
-					<td><a href="/addcart/${prod.id}"><button type="button"
-								class="btn btn-info btn-sm">Add to Cart</button></a></td>
-				</tr>
-			</c:forEach>
-		</tbody>
 
-	</table>
 
 	<!-- Footer -->
 	<footer class="footer navbar-default" role="contentinfo">

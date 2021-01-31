@@ -186,5 +186,21 @@ public class MainController {
 		mv.addObject("user", user);
 		return mv;
 	}
-	//what
+
+	@GetMapping("/admin")
+	public ModelAndView getAdmin(HttpSession session) {
+		User sessionUser = (User) session.getAttribute("user");
+		if (sessionUser == null) {
+			return new ModelAndView("redirect:/");
+		}
+		User lookupUser = (User) userRepo.findById(sessionUser.getId()).get();
+		if (lookupUser.isAdmin() == false) {
+			return new ModelAndView("redirect:/");
+		}
+		List<Product> allProducts = (List<Product>) prodRepo.findAll();
+		ModelAndView mv = new ModelAndView("admin", "products", allProducts);
+		List<User> allUsers = (List<User>) userRepo.findAll();
+		mv.addObject("users", allUsers);
+		return mv;
+	}
 }
