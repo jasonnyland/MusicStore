@@ -30,6 +30,7 @@
 								<form:label path="password" for="inputPassword">Password</form:label>
 								<form:input path="password" type="password" id="inputPassword" class="form-control" placeholder="Password" />
 							</div>
+							<p class="my-3">Don't have an account? <a href="/register">Register Here</a></p>
 							<button class="btn btn-lg btn-primary btn-block mt-5" type="submit">Login</button>
 						</form:form>
 					</div>

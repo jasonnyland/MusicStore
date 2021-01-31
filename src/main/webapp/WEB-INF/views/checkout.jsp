@@ -38,17 +38,33 @@
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				<c:if test="${user == null}">
-					<li class="nav-item"><a class="nav-link" href="/login">Login</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="/register">Register</a>
-					</li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Login or Register Here</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="/login">Login</a> <a
+								class="dropdown-item" href="/register">Register</a>
+						</div></li>
 				</c:if>
 				<c:if test="${user != null}">
-					<li class="nav-item"><a class="nav-link" href="/profile">Hello ${user.userName}</a>
-					</li>
-					<li class="nav-item"><a class="nav-link" href="/logout">Logout</a>
-					</li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">Hello
+							${user.userName}</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="/profile">Profile</a>
+							<c:if test="${user.admin == true}">
+								<a class="dropdown-item" href="/admin">Admin</a>
+							</c:if>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/logout">Logout</a>
+						</div></li>
 				</c:if>
+				<form class="form-inline my-2 my-lg-0" method="get" action="/search">
+					<input class="form-control mr-sm-2" type="text"
+						placeholder="Search" name="term">
+					<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+				</form>
 			</ul>
 		</div>
 	</nav>
